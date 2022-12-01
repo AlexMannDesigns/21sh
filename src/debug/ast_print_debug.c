@@ -6,7 +6,7 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 15:07:12 by amann             #+#    #+#             */
-/*   Updated: 2022/11/29 14:49:56 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/01 16:05:33 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,24 @@ static void	print_redirs(t_ast *node, int fd)
 	ft_dprintf(fd, "\n");
 }
 
-static void	print_ast_node(t_ast *node, int space, int count, int fd)
+static void	print_spaces(int space, int count, int fd)
 {
 	int	i;
 
 	i = count;
-	ft_dprintf(fd, "\n");
 	while (i < space)
 	{
 		ft_dprintf(fd, " ");
 		i++;
 	}
+}
+
+static void	print_ast_node(t_ast *node, int space, int count, int fd)
+{
+	int	i;
+
+	ft_dprintf(fd, "\n");
+	print_spaces(space, count, fd);
 	if (node->node_type == AST_PIPE_SEQUENCE)
 		ft_dprintf(fd, "PIPE_SEQUENCE\n");
 	else if (node->node_type == AST_SIMPLE_COMMAND)
@@ -56,6 +63,11 @@ static void	print_ast_node(t_ast *node, int space, int count, int fd)
 		i = 0;
 		while ((node->arg_list)[i])
 			ft_dprintf(fd, "%s ", (char *)(node->arg_list)[i++]);
+		ft_dprintf(fd, "\n");
+		print_spaces(space, count, fd);
+		i = 0;
+		while ((node->var_list)[i])
+			ft_dprintf(fd, "%s ", (char *)(node->var_list)[i++]);
 		ft_dprintf(fd, "\n");
 	}
 	else if (node->node_type == AST_REDIRECTIONS)
