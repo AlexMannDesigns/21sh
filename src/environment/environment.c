@@ -6,7 +6,7 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/03/30 12:39:49 by jumanner          #+#    #+#             */
-/*   Updated: 2022/11/30 14:07:17 by jumanner         ###   ########.fr       */
+/*   Updated: 2022/12/01 16:24:59 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,8 @@ int	env_set(const char *name, const char *value, char *const **env)
 		return (print_error(0, ETEMPLATE_SHELL_SIMPLE, ERR_MALLOC_FAIL));
 	ft_strcpy(new, name);
 	new[ft_strlen(name)] = '=';
-	ft_strcpy(new + ft_strlen(name) + 1, value);
+	if (value && ft_strlen(value) != 0)
+		ft_strcpy(new + ft_strlen(name) + 1, value);
 	free(*destination_pointer);
 	*destination_pointer = new;
 	return (1);
