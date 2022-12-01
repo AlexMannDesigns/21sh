@@ -6,11 +6,22 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 13:44:51 by amann             #+#    #+#             */
-/*   Updated: 2022/11/30 14:07:17 by jumanner         ###   ########.fr       */
+/*   Updated: 2022/12/01 16:35:19 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "execution.h"
+
+void	set_underscore(t_ast_context *ctx, t_state *state)
+{
+	if (ft_null_array_len((void **)ctx->node->left->arg_list) != 0)
+		env_set("_",
+			ctx->node->left->arg_list[
+			ft_null_array_len((void **)ctx->node->left->arg_list) - 1],
+			&(state->env));
+	else
+		env_set("_", NULL, &(state->env));
+}
 
 static int	is_at_end_check(t_ast *node)
 {
@@ -33,12 +44,8 @@ static pid_t	execute_simple_command(t_ast_context *ctx, t_state *state)
 		pipe_reset(ctx->pipes->write);
 	if (ctx->node->left && ctx->node->left->arg_list)
 	{
-		result = execute(
-				ctx->node->left->arg_list, state, ctx);
-		env_set("_",
-			ctx->node->left->arg_list[
-			ft_null_array_len((void **)ctx->node->left->arg_list) - 1],
-			&(state->env));
+		result = execute(ctx->node->left->arg_list, state, ctx);
+		set_underscore(ctx, state);
 	}
 	pipe_close(ctx->pipes->read);
 	pipes_copy(ctx->pipes->read, ctx->pipes->write);
