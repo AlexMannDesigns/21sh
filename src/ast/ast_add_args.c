@@ -6,7 +6,7 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 11:55:34 by amann             #+#    #+#             */
-/*   Updated: 2022/12/01 17:10:38 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/01 17:39:01 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,36 +33,34 @@ static bool	check_cmd_end(t_token **cursor)
 	return (false);
 }
 
-/*
- * malloc protection = if ft_strdup fails, the variable is just not added.
- * Not great, but wont break anything...
- */
-
-bool	check_intern(t_ast **node, t_token *cursor, bool *var_flag)
+bool	check_intern(t_ast **node, t_token **cursor)
 {
 	size_t	idx;
 
-	if (ft_strchr(cursor->value, '=') && *var_flag)
-	{
-		idx = ft_null_array_len((void **) (*node)->var_list);
-		((*node)->var_list)[idx] = ft_strdup(cursor->value);
+	if (ft_null_array_len((void **) (*node)->arg_list))
 		return (true);
+	idx = 0;
+	while (*cursor && ft_strchr((*cursor)->value, '='))
+	{
+		((*node)->var_list)[idx] = ft_strdup((*cursor)->value);
+		if (!((*node)->var_list)[idx])
+			return (print_error_bool(false, ERR_MALLOC_FAIL));
+		idx++;
+		*cursor = (*cursor)->next;
 	}
-	*var_flag = false;
-	return (false);
+	return (true);
 }
-//TODO make this good
 
 bool	allocate_args_array(t_ast **node, t_token **cursor)
 {
 	size_t	idx;
-	bool	var_flag;
 
-	var_flag = true;
+	if (!check_intern(node, cursor))
+		return (false);
 	idx = ft_null_array_len((void **) (*node)->arg_list);
 	while (*cursor && !check_cmd_end(cursor))
 	{
-		if ((*cursor)->type == TOKEN_WORD && !check_intern(node, *cursor, &var_flag))
+		if ((*cursor)->type == TOKEN_WORD)
 		{
 			((*node)->arg_list)[idx] = ft_strdup((*cursor)->value);
 			if (!((*node)->arg_list)[idx])
