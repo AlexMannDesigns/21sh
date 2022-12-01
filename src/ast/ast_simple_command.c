@@ -6,7 +6,7 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/15 17:39:33 by amann             #+#    #+#             */
-/*   Updated: 2022/12/01 14:39:30 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/01 15:54:03 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,15 @@ static bool	args_node(t_token **cursor, t_ast **node)
 		*node = (t_ast *) ft_memalloc(sizeof(t_ast));
 	if (!*node)
 		return (print_error_bool(false, ERR_MALLOC_FAIL));
-	if (!(*node)->node_type)
+	if (!((*node)->node_type))
 		(*node)->node_type = AST_COMMAND_ARGS;
-	if (!(*node)->arg_list)
-		(*node)->arg_list = (char **) ft_memalloc(sizeof(char *) * 3);
-	if (!(*node)->arg_list)
+	if (!((*node)->arg_list))
+		(*node)->arg_list = (char **) ft_memalloc(sizeof(char *) * (INPUT_MAX_SIZE / 2));
+	if (!((*node)->var_list))
+		(*node)->var_list = (char **) ft_memalloc(sizeof(char *) * (INPUT_MAX_SIZE / 2));
+	if (!((*node)->arg_list) || !((*node)->var_list))
 		return (print_error_bool(false, ERR_MALLOC_FAIL));
-	if (!(allocate_args_array(&(*node)->arg_list, cursor)))
+	if (!(allocate_args_array(node, cursor)))
 		return (false);
 	return (true);
 }

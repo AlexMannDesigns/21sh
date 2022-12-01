@@ -6,11 +6,15 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 13:27:35 by amann             #+#    #+#             */
-/*   Updated: 2022/11/23 16:54:46 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/01 16:00:39 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
+
+
+
+#include "debug.h"
 
 static size_t	ast_count(t_token *list)
 {
