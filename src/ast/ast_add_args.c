@@ -6,33 +6,11 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 11:55:34 by amann             #+#    #+#             */
-/*   Updated: 2022/12/01 14:50:39 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/01 16:01:27 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ast.h"
-
-static bool	realloc_array(char ***arr, size_t size)
-{
-	char	**res;
-	size_t	i;
-
-	res = (char **) ft_memalloc(sizeof(char *) * (size + 1));
-	if (!res)
-	{
-		ft_free_null_array((void **) *arr);
-		return (print_error_bool(false, ERR_MALLOC_FAIL));
-	}
-	i = 0;
-	while ((*arr)[i])
-	{
-		res[i] = (*arr)[i];
-		i++;
-	}
-	free(*arr);
-	*arr = res;
-	return (true);
-}
 
 static bool	check_cmd_end(t_token **cursor)
 {
@@ -55,35 +33,36 @@ static bool	check_cmd_end(t_token **cursor)
 	return (false);
 }
 
-static size_t	set_size(size_t idx)
-{
-	size_t	ret;
+/*
+ * malloc protection = if ft_strdup fails, the variable is just not added.
+ * Not great, but wont break anything...
+ */
 
-	ret = idx;
-	if (idx < 2)
-		ret = 2;
-	return (ret);
-}
-
-bool	allocate_args_array(char ***res, t_token **cursor)
+bool	check_intern(t_ast **node, t_token *cursor)
 {
 	size_t	idx;
-	size_t	size;
 
-	idx = ft_null_array_len((void **) *res);
-	size = set_size(idx);
+	if (ft_strchr(cursor->value, '='))
+	{
+		idx = ft_null_array_len((void **) (*node)->var_list);
+		((*node)->var_list)[idx] = ft_strdup(cursor->value);
+		return (true);
+	}
+	return (false);
+}
+//TODO make this good
+
+bool	allocate_args_array(t_ast **node, t_token **cursor)
+{
+	size_t	idx;
+
+	idx = ft_null_array_len((void **) (*node)->arg_list);
 	while (*cursor && !check_cmd_end(cursor))
 	{
-		if ((*cursor)->type == TOKEN_WORD)
+		if ((*cursor)->type == TOKEN_WORD && !check_intern(node, *cursor))
 		{
-			if (idx >= size)
-			{
-				size *= 2;
-				if (!realloc_array(res, size))
-					return (false);
-			}
-			(*res)[idx] = ft_strdup((*cursor)->value);
-			if (!(*res)[idx])
+			((*node)->arg_list)[idx] = ft_strdup((*cursor)->value);
+			if (!((*node)->arg_list)[idx])
 				return (print_error_bool(false, ERR_MALLOC_FAIL));
 			idx++;
 		}

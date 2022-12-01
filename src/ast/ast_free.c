@@ -6,7 +6,7 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/20 12:58:11 by amann             #+#    #+#             */
-/*   Updated: 2022/11/18 13:59:38 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/01 16:07:47 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	ast_free_recursion(t_ast *root)
 	ast_free_recursion(root->left);
 	ast_free_recursion(root->right);
 	root->arg_list = ft_free_null_array((void **) root->arg_list);
+	root->var_list = ft_free_null_array((void **) root->var_list);
 	if (root->redirs)
 	{
 		i = 0;

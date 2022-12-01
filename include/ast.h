@@ -6,7 +6,7 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 11:32:04 by jumanner          #+#    #+#             */
-/*   Updated: 2022/12/02 13:04:30 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/05 16:15:12 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ typedef int	t_parse_function(t_token **cursor, t_state *state, char **result);
 bool	ft_isdigit_str(char *s);
 
 /* ast_add_args.c */
-bool	allocate_args_array(char ***res, t_token **cursor);
+bool	allocate_args_array(t_ast **node, t_token **cursor);
 
 /* ast_add_fd_aggregation.c */
 bool	ast_add_fd_agg(t_ast *node, t_token **cursor);
