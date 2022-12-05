@@ -6,7 +6,7 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 11:55:34 by amann             #+#    #+#             */
-/*   Updated: 2022/12/05 18:41:01 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/05 19:16:25 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static bool	check_var_syntax(char *str)
 {
 	size_t	i;
 
-	if (!str || !ft_strchr(str, '=') || str[0] == '=')
+	if (!str || !ft_strchr(str, '=') || str[0] == '=' || ft_isdigit(str[0]))
 		return (false);
 	i = 0;
 	while (str[i] != '=')
