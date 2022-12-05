@@ -6,7 +6,7 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 11:55:34 by amann             #+#    #+#             */
-/*   Updated: 2022/12/01 17:39:01 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/05 17:38:42 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,22 @@ static bool	check_cmd_end(t_token **cursor)
 	return (false);
 }
 
+static bool	check_var_syntax(char *str)
+{
+	size_t	i;
+
+	if (!str || !ft_strchr(str, '=') || str[0] == '=')
+		return (false);
+	i = 0;
+	while (str[i] != '=')
+	{
+		if (!ft_isalnum(str[i]) && str[i] != '_')
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
 bool	check_intern(t_ast **node, t_token **cursor)
 {
 	size_t	idx;
@@ -40,7 +56,7 @@ bool	check_intern(t_ast **node, t_token **cursor)
 	if (ft_null_array_len((void **) (*node)->arg_list))
 		return (true);
 	idx = 0;
-	while (*cursor && ft_strchr((*cursor)->value, '='))
+	while (*cursor && check_var_syntax((*cursor)->value))
 	{
 		((*node)->var_list)[idx] = ft_strdup((*cursor)->value);
 		if (!((*node)->var_list)[idx])

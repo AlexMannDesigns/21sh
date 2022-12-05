@@ -6,7 +6,7 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 11:32:11 by jumanner          #+#    #+#             */
-/*   Updated: 2022/12/01 11:54:11 by jumanner         ###   ########.fr       */
+/*   Updated: 2022/12/05 18:34:57 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,9 @@ void	pipes_copy(int target[2], const int source[2]);
 
 /* heredocs.c */
 int		heredoc_run(t_ast *redir_node, t_pipes *pipes);
+
+/* internal_variables.c */
+void	set_internal_variables(char **var_list, t_state *state);
 
 /* redirects.c */
 void	initialize_redir_struct(t_redir *r);

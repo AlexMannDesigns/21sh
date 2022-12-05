@@ -6,7 +6,7 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 13:44:51 by amann             #+#    #+#             */
-/*   Updated: 2022/12/01 16:35:19 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/05 18:36:41 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ static pid_t	execute_simple_command(t_ast_context *ctx, t_state *state)
 	if (ctx->node->left && ctx->node->left->arg_list)
 	{
 		result = execute(ctx->node->left->arg_list, state, ctx);
+		if (result == -1)
+			set_internal_variables(ctx->node->left->var_list, state);
 		set_underscore(ctx, state);
 	}
 	pipe_close(ctx->pipes->read);
