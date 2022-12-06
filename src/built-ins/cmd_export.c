@@ -6,7 +6,7 @@
 /*   By: amann <amann@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 13:31:22 by amann             #+#    #+#             */
-/*   Updated: 2022/12/06 15:03:30 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/06 16:00:28 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,31 @@ int	print_export_error(char *var, int ret)
 	return (ret);
 }
 
+int	export_variable(char *var, t_state *state)
+{
+	size_t	len;
+	char	*name;
+	char	**internal_var;
+
+
+	if (!(state->intern))
+		state->intern = (char **) ft_memalloc(sizeof(char *) * (INPUT_MAX_SIZE / 2)); //protection needed
+	len = valid_env_name_length(var);
+	name = ft_strndup(var, len); //protect
+	internal_var = env_get_pointer(name, state->intern);
+	if (internal_var)
+	{
+		ft_strdel(internal_var);
+		*internal_var = ft_strdup(var); //protect
+	}
+	else
+		(state->intern)[ft_null_array_len((void **) state->intern)] = ft_strdup(var); //protection needed
+	//add to internal vars list
+	//add to env
+	ft_strdel(&name);
+	return (1);
+}
+
 /*
  * export works similarly to setenv; ostensibly it allows the user to declare
  * variables that will be permanently added to the environment of future
@@ -48,16 +73,23 @@ int	print_export_error(char *var, int ret)
  * If <name> exists in the internal shell variables, it will be exported to
  * the environment.
  *
+ * If it does not exist, it will not go into the env, but will go into the list
+ * of exported variables (assuming the syntax is ok) UNLESS that variable
+ * already exists.
+ *
  * When the -p flag is specified, all of the names of exported variables are
  * written to the stdout.
+ *
  */
 
 int	cmd_export(char *const *args, t_state *state)
 {
 	size_t	i;
+	int		ret;
 
 	if (!args[1] || (ft_strequ(args[1], "-p") && !args[2]))
 		return (print_exported(state));
+	ret = 0;
 	i = 1;
 	if (ft_strequ(args[1], "-p"))
 		i = 2;
@@ -66,11 +98,13 @@ int	cmd_export(char *const *args, t_state *state)
 		if (ft_strchr(args[i], '='))
 		{
 			if (!check_var_syntax(args[i]))
-				print_export_error(args[i], 1);
+				ret = print_export_error(args[i], 1);
+			if (!export_variable(args[i], state))
+				return (1);
 		}
 		else
 			ft_putendl("var name search");
 		i++;
 	}
-	return (0);
+	return (ret);
 }
