@@ -6,7 +6,7 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/19 11:55:34 by amann             #+#    #+#             */
-/*   Updated: 2022/12/05 19:16:25 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/06 14:55:56 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,23 +33,7 @@ static bool	check_cmd_end(t_token **cursor)
 	return (false);
 }
 
-static bool	check_var_syntax(char *str)
-{
-	size_t	i;
-
-	if (!str || !ft_strchr(str, '=') || str[0] == '=' || ft_isdigit(str[0]))
-		return (false);
-	i = 0;
-	while (str[i] != '=')
-	{
-		if (!ft_isalnum(str[i]) && str[i] != '_')
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
-bool	check_intern(t_ast **node, t_token **cursor)
+static bool	check_intern(t_ast **node, t_token **cursor)
 {
 	size_t	idx;
 

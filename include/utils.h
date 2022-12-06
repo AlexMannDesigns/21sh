@@ -6,7 +6,7 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 11:32:20 by jumanner          #+#    #+#             */
-/*   Updated: 2022/12/05 14:10:32 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/06 14:57:49 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 
 /* debug_redir.c */
 void	debug_redir(t_ast_redir *redir, t_redir *r);
+
+/* check_var_syntax.c */
+bool	check_var_syntax(char *str);
 
 /* error.c */
 int		print_error_valist(int return_value, char *format, va_list list);

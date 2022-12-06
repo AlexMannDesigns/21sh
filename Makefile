@@ -6,7 +6,7 @@
 #    By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/03/25 13:02:44 by jumanner          #+#    #+#              #
-#    Updated: 2022/12/05 18:31:19 by amann            ###   ########.fr        #
+#    Updated: 2022/12/06 14:58:30 by amann            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,7 +35,7 @@ AUTOCOMPLETE_FILES = autocomplete.c
 BUILT_INS_DIR = built-ins
 BUILT_INS_FILES = built_ins.c built_ins_flags.c cmd_cd.c cmd_echo.c cmd_env.c \
 				cmd_fc.c cmd_setenv.c cmd_unsetenv.c cmd_exit.c \
-				cmd_execute_script.c cmd_true_false.c cmd_type.c
+				cmd_execute_script.c cmd_export.c cmd_true_false.c cmd_type.c
 
 CLEANUP_DIR = cleanup
 CLEANUP_FILES = cleanup.c
@@ -86,7 +86,7 @@ TERMINAL_FILES = terminal_configuration.c
 
 UTILS_DIR = utils
 UTILS_FILES = error.c utils.c utils_input.c return_value.c syntax_error.c \
-			  	debug_redir.c
+			  	debug_redir.c check_var_syntax.c
 
 SRC_FILES = main.c \
 			$(patsubst %, $(AST_DIR)/%, $(AST_FILES)) \
