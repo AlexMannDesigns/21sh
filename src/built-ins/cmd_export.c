@@ -6,7 +6,7 @@
 /*   By: amann <amann@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 13:31:22 by amann             #+#    #+#             */
-/*   Updated: 2022/12/06 16:00:28 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/06 16:58:35 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,19 @@ int	export_variable(char *var, t_state *state)
 {
 	size_t	len;
 	char	*name;
-	char	**internal_var;
+	char	*value;
 
 
 	if (!(state->intern))
 		state->intern = (char **) ft_memalloc(sizeof(char *) * (INPUT_MAX_SIZE / 2)); //protection needed
 	len = valid_env_name_length(var);
 	name = ft_strndup(var, len); //protect
-	internal_var = env_get_pointer(name, state->intern);
+	value = ft_strchr(var, '=');
+	value += 1;
+	//TODO add to internal vars list
+	if (!env_set(name, value, &(state->env)) || !env_set(name, value, &(state->intern)))
+		return (0);
+/*	internal_var = env_get_pointer(name, state->intern);
 	if (internal_var)
 	{
 		ft_strdel(internal_var);
@@ -48,8 +53,7 @@ int	export_variable(char *var, t_state *state)
 	}
 	else
 		(state->intern)[ft_null_array_len((void **) state->intern)] = ft_strdup(var); //protection needed
-	//add to internal vars list
-	//add to env
+*/	//add to env
 	ft_strdel(&name);
 	return (1);
 }
