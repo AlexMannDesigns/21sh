@@ -6,7 +6,7 @@
 /*   By: amann <amann@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 13:31:22 by amann             #+#    #+#             */
-/*   Updated: 2022/12/06 16:58:35 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/06 18:04:55 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,17 @@ int	print_export_error(char *var, int ret)
 	return (ret);
 }
 
-int	export_variable(char *var, t_state *state)
+bool	print_bool_export_error(char *var, bool ret)
+{
+	ft_dprintf(
+			STDERR_FILENO,
+			"21sh: export: `%s': not a valid identifier\n",
+			var
+			);
+	return (ret);
+}
+
+bool export_new_variable(char *var, t_state *state)
 {
 	size_t	len;
 	char	*name;
@@ -42,20 +52,48 @@ int	export_variable(char *var, t_state *state)
 	name = ft_strndup(var, len); //protect
 	value = ft_strchr(var, '=');
 	value += 1;
-	//TODO add to internal vars list
+	//TODO add to exported vars list
 	if (!env_set(name, value, &(state->env)) || !env_set(name, value, &(state->intern)))
-		return (0);
-/*	internal_var = env_get_pointer(name, state->intern);
-	if (internal_var)
-	{
-		ft_strdel(internal_var);
-		*internal_var = ft_strdup(var); //protect
-	}
-	else
-		(state->intern)[ft_null_array_len((void **) state->intern)] = ft_strdup(var); //protection needed
-*/	//add to env
+		return (false);
 	ft_strdel(&name);
-	return (1);
+	return (true);
+}
+
+/*
+ * Check the list of internal variables. If a match is found, this can be
+ * copied into the environment.
+ *
+ * Otherwise, the syntax of the name can be checked for validity. If invalid
+ * an error can be returned. Otherwise, it can be added to the list of exported
+ * variables.
+ */
+
+bool	export_existing_variable(char *name, t_state *state)
+{
+	char	**var;
+	char	*value;
+	size_t	i;
+
+	var = env_get_pointer(name, state->intern);
+	if (var)
+	{
+		value = ft_strchr(*var, '=');
+		value += 1;
+		if (!env_set(name, value, &(state->env)))
+			return (false);
+		return (true);
+	}
+	if (ft_isdigit(name[0]))
+		return (print_bool_export_error(name, false));
+	i = 0;
+	while (name[i])
+	{
+		if (!ft_isalnum(name[i]) && name[i] != '_')
+			return (print_bool_export_error(name, false));
+		i++;
+	}
+	//add to exported variables list if name syntax checks out
+	return (true);
 }
 
 /*
@@ -102,12 +140,16 @@ int	cmd_export(char *const *args, t_state *state)
 		if (ft_strchr(args[i], '='))
 		{
 			if (!check_var_syntax(args[i]))
-				ret = print_export_error(args[i], 1);
-			if (!export_variable(args[i], state))
-				return (1);
+			{
+				print_export_error(args[i], 1);
+				if (ret == 0)
+					ret = 1;
+			}
+			if (!export_new_variable(args[i], state) && ret == 0)
+				ret = 1;
 		}
-		else
-			ft_putendl("var name search");
+		else if (!export_existing_variable(args[i], state) && ret == 0)
+			ret = 1;
 		i++;
 	}
 	return (ret);
