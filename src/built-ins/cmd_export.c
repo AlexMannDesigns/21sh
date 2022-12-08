@@ -6,7 +6,7 @@
 /*   By: amann <amann@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 13:31:22 by amann             #+#    #+#             */
-/*   Updated: 2022/12/06 18:10:57 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/08 18:09:44 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 int	print_exported(t_state *state)
 {
-	ft_printf("uwu this is a list of the exported variables (except not right now lol):\n");
-	env_print_all(state->intern);
+	ft_printf("uwu this is a list of the exported variables:\n");
+	env_print_all((char *const *)state->exported);
 	return (0);
 }
 
@@ -53,7 +53,8 @@ bool export_new_variable(char *var, t_state *state)
 	value = ft_strchr(var, '=');
 	value += 1;
 	//TODO add to exported vars list
-	if (!env_set(name, value, &(state->env)) || !env_set(name, value, &(state->intern)))
+	if (!env_set(name, value, &(state->env)) || !env_set(name, value, &(state->intern))
+			|| !env_set(name, value, (char *const **)&(state->exported)))
 		return (false);
 	ft_strdel(&name);
 	return (true);
@@ -73,13 +74,15 @@ bool	export_existing_variable(char *name, t_state *state)
 	char	**var;
 	char	*value;
 	size_t	i;
+	size_t	len;
 
 	var = env_get_pointer(name, state->intern);
 	if (var)
 	{
 		value = ft_strchr(*var, '=');
 		value += 1;
-		if (!env_set(name, value, &(state->env)))
+		if (!env_set(name, value, &(state->env))
+			|| !env_set(name, value, (char *const **) &(state->exported)))
 			return (false);
 		return (true);
 	}
@@ -92,7 +95,10 @@ bool	export_existing_variable(char *name, t_state *state)
 			return (print_bool_export_error(name, false));
 		i++;
 	}
-	//add to exported variables list if name syntax checks out
+	len = ft_null_array_len((void **)(state->exported));
+	(state->exported)[len] = ft_strdup(name);
+	if (!(state->exported)[len])
+		return (print_error_bool(ERR_MALLOC_FAIL, false));
 	return (true);
 }
 
@@ -131,6 +137,8 @@ int	cmd_export(char *const *args, t_state *state)
 
 	if (!args[1] || (ft_strequ(args[1], "-p") && !args[2]))
 		return (print_exported(state));
+	if (!(state->exported))
+		state->exported = (char **) ft_memalloc(sizeof(char *) * (INPUT_MAX_SIZE / 2)); //protection needed
 	ret = 0;
 	i = 1;
 	if (ft_strequ(args[1], "-p"))
