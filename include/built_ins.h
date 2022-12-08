@@ -6,7 +6,7 @@
 /*   By: jumanner <jumanner@student.hive.fi>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/27 11:32:06 by jumanner          #+#    #+#             */
-/*   Updated: 2022/12/06 14:28:53 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/08 20:18:34 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,9 @@ int		cmd_execute_script(char *const *args, t_state *state);
 
 /* cmd_export.c */
 int		cmd_export(char *const *args, t_state *state);
+
+/* cmd_set.c */
+int		cmd_set(char *const *args, t_state *state);
 
 /* cmd_true_false.c */
 int		cmd_true(char *const *args, t_state *state);

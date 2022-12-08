@@ -6,7 +6,7 @@
 /*   By: amann <amann@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/06 13:31:22 by amann             #+#    #+#             */
-/*   Updated: 2022/12/08 18:09:44 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/08 20:38:48 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,15 @@
 
 int	print_exported(t_state *state)
 {
+	size_t	i;
+
 	ft_printf("uwu this is a list of the exported variables:\n");
-	env_print_all((char *const *)state->exported);
+	i = 0;
+	while ((state->exported)[i])
+	{
+		ft_putendl((state->exported)[i]);
+		i++;
+	}
 	return (0);
 }
 
@@ -46,13 +53,10 @@ bool export_new_variable(char *var, t_state *state)
 	char	*value;
 
 
-	if (!(state->intern))
-		state->intern = (char **) ft_memalloc(sizeof(char *) * (INPUT_MAX_SIZE / 2)); //protection needed
 	len = valid_env_name_length(var);
 	name = ft_strndup(var, len); //protect
 	value = ft_strchr(var, '=');
 	value += 1;
-	//TODO add to exported vars list
 	if (!env_set(name, value, &(state->env)) || !env_set(name, value, &(state->intern))
 			|| !env_set(name, value, (char *const **)&(state->exported)))
 		return (false);
@@ -95,7 +99,10 @@ bool	export_existing_variable(char *name, t_state *state)
 			return (print_bool_export_error(name, false));
 		i++;
 	}
-	len = ft_null_array_len((void **)(state->exported));
+	len = 0;
+	while ((state->exported)[len])
+		len++;
+	ft_printf("%zu\n", len);
 	(state->exported)[len] = ft_strdup(name);
 	if (!(state->exported)[len])
 		return (print_error_bool(ERR_MALLOC_FAIL, false));
@@ -139,6 +146,8 @@ int	cmd_export(char *const *args, t_state *state)
 		return (print_exported(state));
 	if (!(state->exported))
 		state->exported = (char **) ft_memalloc(sizeof(char *) * (INPUT_MAX_SIZE / 2)); //protection needed
+	if (!(state->intern))
+		state->intern = (char **) ft_memalloc(sizeof(char *) * (INPUT_MAX_SIZE / 2)); //protection needed
 	ret = 0;
 	i = 1;
 	if (ft_strequ(args[1], "-p"))

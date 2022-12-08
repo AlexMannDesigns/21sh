@@ -6,7 +6,7 @@
 /*   By: amann <amann@student.hive.fi>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/05 18:23:18 by amann             #+#    #+#             */
-/*   Updated: 2022/12/06 17:01:10 by amann            ###   ########.fr       */
+/*   Updated: 2022/12/08 20:04:59 by amann            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,4 @@ void	set_internal_variables(char **var_list, t_state *state)
 		ft_strdel(&name);
 		i++;
 	}
-	for (i = 0 ; state->intern[i]; i++)
-		ft_putendl(state->intern[i]);
 }
