@@ -48,9 +48,9 @@ The following shell built-ins have been implemented:
   - true/false
 ```
 
-NB: setenv/unsetenv are based on Csh. This shell does not support internal variables, so the export/unset built-ins you are likely more familiar with could not be added.
+NB: setenv/unsetenv are based on [Csh](https://en.wikipedia.org/wiki/C_shell). This shell does not support internal variables, so the export/unset built-ins you are likely more familiar with could not be added.
 
-Advanced command-line editting is supported in 21sh via the Termcaps library. The following features are supported:
+Advanced command-line editting is supported in 21sh via the [Termcaps library](https://www.gnu.org/software/termutils/manual/termcap-1.3/html_mono/termcap.html). The following features are supported:
 
 ```
   - editing the line where the cursor is located, and being able to move the cursor left or right with the arrow keys
