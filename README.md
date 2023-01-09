@@ -9,9 +9,10 @@ My key learnings during this project were:
   - General improvement in my working knowledge of Unix Operating Systems, particularly file descriptors and processes
   - Improved planning and project management skills while working with other developers on long-term projects
   
-# The shell in action:
+## The shell in action:
 ![](https://github.com/AlexMannDesigns/21sh/blob/master/shell.gif)
 
+## Installing and running:
 To compile and run this program you will need:
   - A Unix or Unix-like operating system (preferrably MacOs or Linux)
   - GNU Make 3.81
@@ -22,6 +23,7 @@ Clone this repository and in the root directory run the following command to ent
 make; make clean; ./21sh
 ```
 
+## Features included:
 This shell boasts the following features:
 
 ```
