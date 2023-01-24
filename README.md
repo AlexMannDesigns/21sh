@@ -58,4 +58,11 @@ Advanced command-line editting is supported in 21sh via the [Termcaps library](h
   - home and end keys will take you to the beginning and end of the line respectively.
   - editing a line across multiple lines (for example in heredocs or inside quotes and double-quotes)
 ```
+
+## Resources we found very useful:
+
+- [The Bash Hackers Wiki](https://wiki.bash-hackers.org/)
+- The Open Group's documentation, specifically, [this page on Shell Command Language](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html)
+- [The Art Of Unix Programming](http://www.catb.org/esr/writings/taoup/html/)
+
  
